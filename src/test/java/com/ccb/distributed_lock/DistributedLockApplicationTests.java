@@ -1,6 +1,7 @@
 package com.ccb.distributed_lock;
 
 import com.ccb.distributed_lock.bean.Ticket;
+import com.ccb.distributed_lock.lock.ZookeeperDistributedLock;
 import com.ccb.distributed_lock.runnable.Seller;
 import com.ccb.distributed_lock.runnable.SellerWithLock;
 import org.junit.jupiter.api.Test;
@@ -11,13 +12,15 @@ import java.io.IOException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-@SpringBootTest
+//@SpringBootTest
 class DistributedLockApplicationTests {
 
     private volatile Ticket ticket = new Ticket();
 
     @Autowired
-    private Lock lock;
+    private Lock mySQLlock;  //注入MySQLDistributedLock
+
+    private Lock zkLock= new ZookeeperDistributedLock();
 
     /**
      * 不加锁的情况，volatile并不能保证原子性，在售票过程中，同一张票可能会被卖出多次，且可能会出现超卖
@@ -68,10 +71,10 @@ class DistributedLockApplicationTests {
      */
     @Test
     void sellTicketWithMySQLDistributedLock() throws IOException {
-        Thread thread = new Thread(new SellerWithLock(ticket, lock));
-        Thread thread1 = new Thread(new SellerWithLock(ticket, lock));
-        Thread thread2 = new Thread(new SellerWithLock(ticket, lock));
-        Thread thread3 = new Thread(new SellerWithLock(ticket, lock));
+        Thread thread = new Thread(new SellerWithLock(ticket, mySQLlock));
+        Thread thread1 = new Thread(new SellerWithLock(ticket, mySQLlock));
+        Thread thread2 = new Thread(new SellerWithLock(ticket, mySQLlock));
+        Thread thread3 = new Thread(new SellerWithLock(ticket, mySQLlock));
         thread.start();
         thread1.start();
         thread2.start();
@@ -80,8 +83,21 @@ class DistributedLockApplicationTests {
     }
 
     @Test
-    public void testLock() {
-        lock.unlock();
+    void sellTicketWithZKDistributedLock() throws IOException {
+        Thread thread = new Thread(new SellerWithLock(ticket, zkLock));
+        Thread thread1 = new Thread(new SellerWithLock(ticket, zkLock));
+        Thread thread2 = new Thread(new SellerWithLock(ticket, zkLock));
+        Thread thread3 = new Thread(new SellerWithLock(ticket, zkLock));
+        thread.start();
+        thread1.start();
+        thread2.start();
+        thread3.start();
+        System.in.read();
     }
+
+//    @Test
+//    public void testLock() {
+//        lock.unlock();
+//    }
 
 }
