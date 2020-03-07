@@ -84,7 +84,7 @@ public class ZookeeperDistributedLock implements Lock {
     @Override
     public boolean tryLock() {
         if (StringUtils.isEmpty(currentPath)) {
-            currentPath = zkClient.createEphemeralSequential(LOCK_PATH + "/", "lock").substring(6);
+            currentPath = zkClient.createEphemeralSequential(LOCK_PATH + "/", "lock");
             System.out.println("----------------------------->" + currentPath);
         }
         List<String> children = zkClient.getChildren(LOCK_PATH)
@@ -94,7 +94,7 @@ public class ZookeeperDistributedLock implements Lock {
         if (currentPath.equals(LOCK_PATH + "/" + children.get(0))) {
             return true;
         }
-        int index = Collections.binarySearch(children, currentPath);
+        int index = Collections.binarySearch(children, currentPath.substring(6));
         beforePath = LOCK_PATH + "/" + children.get(index - 1);
         return false;
     }

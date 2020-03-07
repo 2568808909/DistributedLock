@@ -30,11 +30,11 @@ public class SellerWithRedisson implements Runnable {
             } finally {
                 lock.unlock();
             }
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(200);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 }

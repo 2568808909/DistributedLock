@@ -84,10 +84,10 @@ class DistributedLockApplicationTests {
 
     @Test
     void sellTicketWithZKDistributedLock() throws IOException {
-        Thread thread = new Thread(new SellerWithLock(ticket, zkLock));
-        Thread thread1 = new Thread(new SellerWithLock(ticket, zkLock));
-        Thread thread2 = new Thread(new SellerWithLock(ticket, zkLock));
-        Thread thread3 = new Thread(new SellerWithLock(ticket, zkLock));
+        Thread thread = new Thread(new SellerWithLock(ticket, new ZookeeperDistributedLock()));
+        Thread thread1 = new Thread(new SellerWithLock(ticket, new ZookeeperDistributedLock()));
+        Thread thread2 = new Thread(new SellerWithLock(ticket, new ZookeeperDistributedLock()));
+        Thread thread3 = new Thread(new SellerWithLock(ticket, new ZookeeperDistributedLock()));
         thread.start();
         thread1.start();
         thread2.start();
