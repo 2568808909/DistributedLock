@@ -18,7 +18,7 @@ class DistributedLockApplicationTests {
     private volatile Ticket ticket = new Ticket();
 
     @Autowired
-    private Lock mySQLlock;  //注入MySQLDistributedLock
+    private Lock mySQLock;  //注入MySQLDistributedLock
 
     private Lock zkLock= new ZookeeperDistributedLock();
 
@@ -71,10 +71,10 @@ class DistributedLockApplicationTests {
      */
     @Test
     void sellTicketWithMySQLDistributedLock() throws IOException {
-        Thread thread = new Thread(new SellerWithLock(ticket, mySQLlock));
-        Thread thread1 = new Thread(new SellerWithLock(ticket, mySQLlock));
-        Thread thread2 = new Thread(new SellerWithLock(ticket, mySQLlock));
-        Thread thread3 = new Thread(new SellerWithLock(ticket, mySQLlock));
+        Thread thread = new Thread(new SellerWithLock(ticket, mySQLock));
+        Thread thread1 = new Thread(new SellerWithLock(ticket, mySQLock));
+        Thread thread2 = new Thread(new SellerWithLock(ticket, mySQLock));
+        Thread thread3 = new Thread(new SellerWithLock(ticket, mySQLock));
         thread.start();
         thread1.start();
         thread2.start();
